@@ -6,6 +6,10 @@
 using namespace std;
 typedef pair<int, int> point;
 typedef vector<vector<int>> vector2d;
+struct state {
+  point parent;
+  double f, g, h;
+}
 
 #include "logic/helpers.hpp"
 #include "logic/backend.hpp"
