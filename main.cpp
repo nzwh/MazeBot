@@ -4,6 +4,8 @@
 #include <fstream>
 
 using namespace std;
+typedef pair<int, int> point;
+typedef vector<vector<int>> vector2d;
 
 #include "logic/helpers.hpp"
 #include "logic/backend.hpp"
@@ -11,9 +13,10 @@ using namespace std;
 
 int main() {
 
-    vector<vector<int>> board;
-    load_board(&board, "mazes/01.txt");
-    print_board(&board);
+    vector2d board;
+    point start, end;
+    load_board(&board, &start, &end, "mazes/01.txt");
+    print_board(&board, &start, &end);
     
     return 0;
 }
