@@ -46,7 +46,7 @@ void trace_path(vector<vector<cell>> cells, point end) {
     }
 }
 
-void move(int x, int y, vector2d* board, int dim, point end) {
+void move(int x, int y, vector2d* board, int dim, point end, priority_queue<node, vector<node>, greater<node>>& frontier) {
 
     if (!is_valid(dim, x, y)) {
         return;
@@ -72,6 +72,9 @@ void move(int x, int y, vector2d* board, int dim, point end) {
 
             board->at(x).at(y).f = f_succ;
             board->at(x).at(y).details = state(point(x, y), g_succ, h_succ);
+
+            // Push the cell to the frontier
+            frontier.emplace(f_succ, x, y);
         }
     }
 }
@@ -102,9 +105,9 @@ void a_star(vector2d* board, point start, point end) {
         board->at(x).at(y).explored = true;
 
         // Move to the adjacent cells
-        move(x + 1, y, board, dim, end);
-        move(x - 1, y, board, dim, end);
-        move(x, y + 1, board, dim, end);
-        move(x, y - 1, board, dim, end);
+        move(x + 1, y, board, dim, end, frontier);
+        move(x - 1, y, board, dim, end, frontier);
+        move(x, y + 1, board, dim, end, frontier);
+        move(x, y - 1, board, dim, end, frontier);
     }
 }
