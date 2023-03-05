@@ -19,14 +19,14 @@ void load_board(vector2d* board, point* start, point* end, string path) {
             int c = row[j];
             if (row[j] == 'S') {
                 *start = make_pair(i, j);
-                c = 1;
+                c = PATH;
             } else if (row[j] == 'G') {
                 *end = make_pair(i, j);
-                c = 1;
+                c = PATH;
             } else if (row[j] == '.') {
-                c = 1;
+                c = PATH;
             } else if (row[j] == '#') {
-                c = 0;
+                c = WALL;
             }
 
             board->at(i).at(j) = c;
