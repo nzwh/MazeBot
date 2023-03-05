@@ -3,6 +3,7 @@ struct state;
 
 typedef pair<int, int> point;
 typedef vector<vector<cell>> vector2d;
+typedef vector2d map;
 
 enum legend {
     WALL = 0, PATH = 1,

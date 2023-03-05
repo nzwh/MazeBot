@@ -15,7 +15,7 @@ using namespace std;
 
 int main() {
 
-    vector2d board;
+    map board;
     point start, end;
     load_board(&board, &start, &end, "mazes/01.txt");
     print_board(&board, &start, &end);
