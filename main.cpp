@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <cfloat>
 #include <tuple>
 #include <queue>
 #include <stack>

@@ -18,10 +18,10 @@ void load_board(vector2d* board, point* start, point* end, string path) {
 
             int c = row[j];
             if (row[j] == 'S') {
-                *start = make_pair(i, j);
+                *start = point(i, j);
                 c = PATH;
             } else if (row[j] == 'G') {
-                *end = make_pair(i, j);
+                *end = point(i, j);
                 c = PATH;
             } else if (row[j] == '.') {
                 c = PATH;
@@ -37,7 +37,7 @@ void load_board(vector2d* board, point* start, point* end, string path) {
 }
 
 string parse_point(point p) {
-    return "(" + to_string(p.first) + ", " + to_string(p.second) + ")";
+    return "(" + to_string(p.x) + ", " + to_string(p.y) + ")";
 }
 
 void print_board(vector2d* board, point* start, point* end) {
