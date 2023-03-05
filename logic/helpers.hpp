@@ -8,6 +8,8 @@ void load_board(vector2d* board, point* start, point* end, string path) {
 
     board->resize(dim);
 
+    // TODO: Assign cell instead of int
+
     for (int i = 0; i < dim; i++) {
 
         board->at(i).resize(dim);

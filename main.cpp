@@ -2,6 +2,9 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <tuple>
+#include <queue>
+#include <stack>
 
 using namespace std;
 
