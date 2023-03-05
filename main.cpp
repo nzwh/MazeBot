@@ -20,6 +20,8 @@ int main() {
     point start, end;
     load_board(&board, &start, &end, "mazes/01.txt");
     print_board(&board, &start, &end);
+
+    a_star(&board, start, end);
     
     return 0;
 }

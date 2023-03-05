@@ -77,14 +77,14 @@ void move(int x, int y, vector2d* board, int dim, point end) {
 }
 
 // This function implements the A* algorithm to find the shortest path from the start point to the end point.
-void a_star(vector2d board, point start, point end) {
+void a_star(vector2d* board, point start, point end) {
     
-    int dim = board.size();
+    int dim = board->size();
 
     int x = start.x;
     int y = start.y;
-    board[x][y].f = 0.0;
-    board[x][y].details = state(point(x, y), 0.0, 0.0);
+    board->at(x).at(y).f = 0.0;
+    board->at(x).at(y).details = state(point(x, y), 0.0, 0.0);
 
     priority_queue<node, vector<node>, greater<node>> frontier;
     frontier.emplace(0.0, x, y);
@@ -99,12 +99,12 @@ void a_star(vector2d board, point start, point end) {
 
         // Remove the cell from the frontier and mark it as explored
         frontier.pop();
-        board[x][y].explored = true;
+        board->at(x).at(y).explored = true;
 
         // Move to the adjacent cells
-        move(x + 1, y, &board, dim, end);
-        move(x - 1, y, &board, dim, end);
-        move(x, y + 1, &board, dim, end);
-        move(x, y - 1, &board, dim, end);
+        move(x + 1, y, board, dim, end);
+        move(x - 1, y, board, dim, end);
+        move(x, y + 1, board, dim, end);
+        move(x, y - 1, board, dim, end);
     }
 }
