@@ -5,7 +5,7 @@ typedef pair<int, int> point;
 typedef vector<vector<cell>> vector2d;
 
 enum legend {
-    EXPLORED = -1, WALL = 0, PATH = 1,
+    WALL = 0, PATH = 1,
 };
 
 struct state {
@@ -21,10 +21,12 @@ struct cell {
 
     int value;
     double f;
+
     state details;
+    bool explored;
 
     cell():
-        value(-1), f(-1.0) {}
+        value(-1), f(-1.0), details(), explored(false) {}
     cell(int v): 
-        value(v), f(-1.0) {}
+        value(v), f(-1.0), details(), explored(false) {}
 };
