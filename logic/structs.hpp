@@ -1,12 +1,23 @@
+struct point;
 struct cell;
 struct state;
 
-typedef pair<int, int> point;
 typedef vector<vector<cell>> vector2d;
+typedef tuple<double, int, int> node;
 typedef vector2d map;
 
 enum legend {
     WALL = 0, PATH = 1,
+};
+
+struct point {
+
+    int x, y;
+
+    point():
+        x(-1), y(-1) {}
+    point(int x, int y):
+        x(x), y(y) {}
 };
 
 struct state {
@@ -15,7 +26,9 @@ struct state {
     double g, h;
 
     state():
-        parent(make_pair(-1, -1)), g(-1.0), h(-1.0) {}
+        parent(-1, -1), g(FLT_MAX), h(FLT_MAX) {}
+    state(point p, double g, double h):
+        parent(p), g(g), h(h) {}
 };
 
 struct cell {
@@ -27,7 +40,8 @@ struct cell {
     state details;
 
     cell():
-        value(-1), f(-1.0), explored(false), details() {}
+        value(-1), f(FLT_MAX), explored(false), details() {}
     cell(int v): 
-        value(v), f(-1.0), explored(false), details() {}
+        value(v), f(FLT_MAX), explored(false), details() {}
 };
+
