@@ -4,6 +4,7 @@ struct state;
 
 typedef vector<vector<cell>> vector2d;
 typedef tuple<double, int, int> node;
+typedef priority_queue<node, vector<node>, greater<node>> minheap;
 
 enum legend {
     WALL = 0, PATH = 1,

@@ -19,7 +19,7 @@ double get_h(point end, int row, int col) {
 }
 
 // This function prints out the path found by the A* algorithm
-void trace_path(vector2d board, point end) {
+void trace_path(vector2d board, point start, point end) {
 
     stack<point> path;
 
@@ -28,17 +28,18 @@ void trace_path(vector2d board, point end) {
     int col = end.y;
 
     // Trace the path back from the end point to the start point using the parent cells
-    while (!(board[row][col].details.parent.x == row
-           && board[row][col].details.parent.y == col)) {
-        path.push(point(row, col));
+    while (!(board[row][col].details.parent.x == start.x
+           && board[row][col].details.parent.y == start.y)) {
+
+        path.emplace(point(row, col));
         int temp_row = board[row][col].details.parent.x;
 		int temp_col = board[row][col].details.parent.y;
 		row = temp_row;
-		col = temp_col;        
+		col = temp_col;      
     }
 
     // Add the start point to the path
-    path.push(point(row, col));
+    path.emplace(point(row, col));
 
     // Prints out the path
     while (!path.empty()) {
@@ -48,7 +49,9 @@ void trace_path(vector2d board, point end) {
     }
 }
 
-void move(int x, int y, vector2d* board, int dim, point end, priority_queue<node, vector<node>, greater<node>>& frontier) {
+void move(point parent, point next, vector2d* board, int dim, point start, point end, minheap& frontier) {
+
+    int x = next.x, y = next.y;
 
     if (!is_valid(dim, x, y)) {
         return;
@@ -57,14 +60,15 @@ void move(int x, int y, vector2d* board, int dim, point end, priority_queue<node
     // Check if the coordinates match the end point
     if (is_end(end, x, y)) {
         // Update the parent coordinates for the current cell and print the path
-        board->at(x).at(y).details.parent.x = x;
-        board->at(x).at(y).details.parent.y = y;
+        board->at(x).at(y).details.parent.x = parent.x;
+        board->at(x).at(y).details.parent.y = parent.y;
         printf("The path is found.\n");
-        trace_path(*board, end);
+        trace_path(*board, start, end);
         //foundDest = true;
 
     } else if (!board->at(x).at(y).explored 
         && is_unblocked(*board, x, y)) {
+            
         // Calculate the cost of moving to the current cell
         double g_succ = board->at(x).at(y).details.g + 1.0;
         double h_succ = get_h(end, x, y);
@@ -75,7 +79,7 @@ void move(int x, int y, vector2d* board, int dim, point end, priority_queue<node
             || board->at(x).at(y).f > f_succ) {
             // Update the cost and details of the current cell
             board->at(x).at(y).f = f_succ;
-            board->at(x).at(y).details = state(point(x, y), g_succ, h_succ);
+            board->at(x).at(y).details = state(point(parent.x, parent.y), g_succ, h_succ);
 
             // Push the cell to the frontier
             frontier.emplace(f_succ, x, y);
@@ -96,7 +100,7 @@ void a_star(vector2d* board, point start, point end) {
     board->at(x).at(y).details = state(point(x, y), 0.0, 0.0);
 
     // Create a priority queue to store the nodes to be explored
-    priority_queue<node, vector<node>, greater<node>> frontier;
+    minheap frontier;
     frontier.emplace(0.0, x, y);
 
     // Loop while there are still cells to explore in the frontier
@@ -112,9 +116,9 @@ void a_star(vector2d* board, point start, point end) {
         board->at(x).at(y).explored = true;
 
         // Move to the adjacent cells
-        move(x + 1, y, board, dim, end, frontier);
-        move(x - 1, y, board, dim, end, frontier);
-        move(x, y + 1, board, dim, end, frontier);
-        move(x, y - 1, board, dim, end, frontier);
+        move(point(x, y), point(x + 1, y), board, dim, start, end, frontier);
+        move(point(x, y), point(x - 1, y), board, dim, start, end, frontier);
+        move(point(x, y), point(x, y + 1), board, dim, start, end, frontier);
+        move(point(x, y), point(x, y - 1), board, dim, start, end, frontier);
     }
 }
