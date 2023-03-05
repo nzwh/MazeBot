@@ -19,14 +19,14 @@ struct state {
 
 struct cell {
 
-    int value;
+    bool value;
     double f;
 
-    state details;
     bool explored;
+    state details;
 
     cell():
-        value(-1), f(-1.0), details(), explored(false) {}
+        value(-1), f(-1.0), explored(false), details() {}
     cell(int v): 
-        value(v), f(-1.0), details(), explored(false) {}
+        value(v), f(-1.0), explored(false), details() {}
 };
