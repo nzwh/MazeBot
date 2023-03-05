@@ -4,7 +4,6 @@ struct state;
 
 typedef vector<vector<cell>> vector2d;
 typedef tuple<double, int, int> node;
-typedef vector2d map;
 
 enum legend {
     WALL = 0, PATH = 1,

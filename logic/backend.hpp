@@ -46,6 +46,36 @@ void trace_path(vector<vector<cell>> cells, point end) {
     }
 }
 
+void move(int x, int y, vector2d* board, int dim, point end) {
+
+    if (!is_valid(dim, x, y)) {
+        return;
+    }
+
+    if (is_end(end, x, y)) {
+
+        board->at(x).at(y).details.parent.x = x;
+        board->at(x).at(y).details.parent.y = y;
+        printf("The path is found.\n");
+        //tracePath(cellDetails, dest);
+        //foundDest = true;
+
+    } else if (!board->at(x).at(y).explored 
+        && is_unblocked(*board, x, y)) {
+
+        double g_succ = board->at(x).at(y).details.g + 1.0;
+        double h_succ = get_h(end, x, y);
+        double f_succ = g_succ + h_succ;
+
+        if (board->at(x).at(y).f == FLT_MAX
+            || board->at(x).at(y).f > f_succ) {
+
+            board->at(x).at(y).f = f_succ;
+            board->at(x).at(y).details = state(point(x, y), g_succ, h_succ);
+        }
+    }
+}
+
 // This function implements the A* algorithm to find the shortest path from the start point to the end point.
 void a_star(vector2d board, point start, point end) {
     
@@ -57,11 +87,11 @@ void a_star(vector2d board, point start, point end) {
     board[x][y].details = state(point(x, y), 0.0, 0.0);
 
     priority_queue<node, vector<node>, greater<node>> frontier;
-    
     frontier.emplace(0.0, x, y);
 
     // Loop while there are still cells to explore in the frontier
     while (!frontier.empty()) {
+
         // Get the next cell to explore from the frontier
         node exploring = frontier.top();
         x = get<1>(exploring);
@@ -71,37 +101,10 @@ void a_star(vector2d board, point start, point end) {
         frontier.pop();
         board[x][y].explored = true;
 
-        double f_succ, g_succ, h_succ;
-
-        // Up (North)
-        // Check if the cell above the current cell is a valid cell to explore
-        if (is_valid(dim, x - 1, y)) {
-            // If the cell above is the end cell, we have found the path
-            if (is_end(end, x - 1, y)) {
-                board[x - 1][y].details.parent.x = x;
-                board[x - 1][y].details.parent.y = y;
-                printf("The path is found.\n");
-                //tracePath(cellDetails, dest);
-				//foundDest = true;
-                return;
-            }
-            // If the cell above is unexplored and unblocked, calculate its f, g, and h values
-            else if (board[x - 1][y].explored == false
-                    && is_unblocked(board, x - 1, y) == true) {
-                g_succ = board[x - 1][y].details.g + 1.0;
-                h_succ = get_h(end, x - 1, y);
-                f_succ = g_succ + h_succ;
-
-                // If the cell has not been visited before or if the new f value is lower,
-                // add it to the frontier and update its parent, f, g, and h values
-                if (board[x - 1][y].f == FLT_MAX
-                    || board[x - 1][y].f > f_succ) {
-                    frontier.emplace(f_succ, x - 1, y);
-
-                    board[x - 1][y].f = f_succ;
-                    board[x - 1][y].details = state(point(x, y), g_succ, h_succ);
-                }
-            }
-        }
+        // Move to the adjacent cells
+        move(x + 1, y, &board, dim, end);
+        move(x - 1, y, &board, dim, end);
+        move(x, y + 1, &board, dim, end);
+        move(x, y - 1, &board, dim, end);
     }
 }
