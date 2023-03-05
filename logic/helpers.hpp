@@ -31,7 +31,7 @@ void load_board(vector2d* board, point* start, point* end, string path) {
                 c = WALL;
             }
 
-            board->at(i).at(j) = c;
+            board->at(i).at(j) = cell(c);
         }
     }
 
@@ -48,7 +48,7 @@ void print_board(vector2d* board, point* start, point* end) {
     for (int i = 0; i < (int)board->size(); i++) {
         
         for (int j = 0; j < (int)board->at(i).size(); j++) {
-            printf("%d ", board->at(i).at(j));
+            printf("%d ", board->at(i).at(j).value);
         }
         cout << endl;
     }
