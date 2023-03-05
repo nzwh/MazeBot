@@ -22,6 +22,7 @@ double get_h(point end, int row, int col) {
 void trace_path(vector<vector<cell>> cells, point end) {
     stack<point> path;
 
+    // Initialize the row and column indices to the end point
     int row = end.x;
     int col = end.y;
 
@@ -47,13 +48,14 @@ void trace_path(vector<vector<cell>> cells, point end) {
 }
 
 void move(int x, int y, vector2d* board, int dim, point end) {
-
+    // Check if the coordinates are out of bounds
     if (!is_valid(dim, x, y)) {
         return;
     }
 
+    // Check if the coordinates match the end point
     if (is_end(end, x, y)) {
-
+        // Update the parent coordinates for the current cell and print the path
         board->at(x).at(y).details.parent.x = x;
         board->at(x).at(y).details.parent.y = y;
         printf("The path is found.\n");
@@ -62,14 +64,15 @@ void move(int x, int y, vector2d* board, int dim, point end) {
 
     } else if (!board->at(x).at(y).explored 
         && is_unblocked(*board, x, y)) {
-
+        // Calculate the cost of moving to the current cell
         double g_succ = board->at(x).at(y).details.g + 1.0;
         double h_succ = get_h(end, x, y);
         double f_succ = g_succ + h_succ;
 
+        // Check if the current cell has not been explored or if the cost to reach it is lower than the previous cost
         if (board->at(x).at(y).f == FLT_MAX
             || board->at(x).at(y).f > f_succ) {
-
+            // Update the cost and details of the current cell
             board->at(x).at(y).f = f_succ;
             board->at(x).at(y).details = state(point(x, y), g_succ, h_succ);
         }
@@ -78,14 +81,16 @@ void move(int x, int y, vector2d* board, int dim, point end) {
 
 // This function implements the A* algorithm to find the shortest path from the start point to the end point.
 void a_star(vector2d* board, point start, point end) {
-    
+    // Get the size of the board
     int dim = board->size();
 
+    // Set the starting point
     int x = start.x;
     int y = start.y;
     board->at(x).at(y).f = 0.0;
     board->at(x).at(y).details = state(point(x, y), 0.0, 0.0);
 
+    // Create a priority queue to store the nodes to be explored
     priority_queue<node, vector<node>, greater<node>> frontier;
     frontier.emplace(0.0, x, y);
 
@@ -102,9 +107,9 @@ void a_star(vector2d* board, point start, point end) {
         board->at(x).at(y).explored = true;
 
         // Move to the adjacent cells
-        move(x + 1, y, board, dim, end);
-        move(x - 1, y, board, dim, end);
-        move(x, y + 1, board, dim, end);
-        move(x, y - 1, board, dim, end);
+        move(x + 1, y, board, dim, end); // Checks the cell below
+        move(x - 1, y, board, dim, end); // Checks the cell above
+        move(x, y + 1, board, dim, end); // Checks the cell at the right side
+        move(x, y - 1, board, dim, end); // Checks the cell at the left side
     }
 }
