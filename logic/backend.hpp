@@ -19,7 +19,8 @@ double get_h(point end, int row, int col) {
 }
 
 // This function prints out the path found by the A* algorithm
-void trace_path(vector<vector<cell>> cells, point end) {
+void trace_path(vector2d board, point end) {
+
     stack<point> path;
 
     // Initialize the row and column indices to the end point
@@ -27,11 +28,11 @@ void trace_path(vector<vector<cell>> cells, point end) {
     int col = end.y;
 
     // Trace the path back from the end point to the start point using the parent cells
-    while (!(cells[row][col].details.parent.x == row
-           && cells[row][col].details.parent.y == col)) {
+    while (!(board[row][col].details.parent.x == row
+           && board[row][col].details.parent.y == col)) {
         path.push(point(row, col));
-        int temp_row = cells[row][col].details.parent.x;
-		int temp_col = cells[row][col].details.parent.y;
+        int temp_row = board[row][col].details.parent.x;
+		int temp_col = board[row][col].details.parent.y;
 		row = temp_row;
 		col = temp_col;        
     }
@@ -59,7 +60,7 @@ void move(int x, int y, vector2d* board, int dim, point end, priority_queue<node
         board->at(x).at(y).details.parent.x = x;
         board->at(x).at(y).details.parent.y = y;
         printf("The path is found.\n");
-        //tracePath(cellDetails, dest);
+        trace_path(*board, end);
         //foundDest = true;
 
     } else if (!board->at(x).at(y).explored 
@@ -84,6 +85,7 @@ void move(int x, int y, vector2d* board, int dim, point end, priority_queue<node
 
 // This function implements the A* algorithm to find the shortest path from the start point to the end point.
 void a_star(vector2d* board, point start, point end) {
+    
     // Get the size of the board
     int dim = board->size();
 
