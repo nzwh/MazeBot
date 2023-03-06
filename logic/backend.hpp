@@ -24,28 +24,26 @@ void trace_path(vector2d* board, point start, point end, vector<point>* r_path) 
     stack<point> path;
 
     // Initialize the row and column indices to the end point
-    int x = end.x;
-    int y = end.y;
+    int cur_x = end.x;
+    int cur_y = end.y;
+    int nextx, nexty;
 
     // Trace the path back from the end point to the start point using the parent cells
-    while (!(board->at(x).at(y).details.parent.x == start.x
-           && board->at(x).at(y).details.parent.y == start.y)) {
+    while (!(nextx == start.x && nexty == start.y)) {
+        
+        path.emplace(point(cur_x, cur_y));
+        board->at(cur_x).at(cur_y).pathed = true;
+        
+		nextx = board->at(cur_x).at(cur_y).details.parent.x;
+		nexty = board->at(cur_x).at(cur_y).details.parent.y;   
 
-        path.emplace(point(x, y));
-		x = board->at(x).at(y).details.parent.x;
-		y = board->at(x).at(y).details.parent.y;   
+        cur_x = nextx;
+        cur_y = nexty;
     }
 
     // Add the start point to the path
-    path.emplace(point(x, y));
-
-    // Prints out the path
-    while (!path.empty()) {
-        point trail = path.top();
-        path.pop();
-        printf("-> (%d,%d) ", trail.x, trail.y);
-        board->at(trail.x).at(trail.y).pathed = true;
-    }
+    path.emplace(point(cur_x, cur_y));
+    path.emplace(point(start.x, start.y));
 }
 
 void move(point parent, point next, vector2d* board, point start, point end, minheap& frontier, vector<point>* r_path, bool* found) {
@@ -74,8 +72,9 @@ void move(point parent, point next, vector2d* board, point start, point end, min
         double f_succ = g_succ + h_succ;
 
         // Check if the current cell has not been explored or if the cost to reach it is lower than the previous cost
-        if (board->at(x).at(y).f == FLT_MAX
+        if (board->at(x).at(y).f == -1
             || board->at(x).at(y).f > f_succ) {
+
             // Update the cost and details of the current cell
             board->at(x).at(y).f = f_succ;
             board->at(x).at(y).details = state(point(parent.x, parent.y), g_succ, h_succ);
@@ -118,5 +117,9 @@ void a_star(vector2d* board, point start, point end, vector<point>* r_path) {
         move(point(x, y), point(x - 1, y), board, start, end, frontier, r_path, &found);
         move(point(x, y), point(x, y + 1), board, start, end, frontier, r_path, &found);
         move(point(x, y), point(x, y - 1), board, start, end, frontier, r_path, &found);
+
+        // print_board(board, &start, &end);
+        // getchar();
+        // system("cls");
     }
 }

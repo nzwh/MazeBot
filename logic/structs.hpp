@@ -26,7 +26,7 @@ struct state {
     double g, h;
 
     state():
-        parent(-1, -1), g(FLT_MAX), h(FLT_MAX) {}
+        parent(-1, -1), g(-1), h(-1) {}
     state(point p, double g, double h):
         parent(p), g(g), h(h) {}
 };
@@ -42,8 +42,8 @@ struct cell {
     bool pathed;
 
     cell():
-        value(-1), f(FLT_MAX), explored(false), details(), pathed(false) {}
+        value(-1), f(-1), explored(false), details(), pathed(false) {}
     cell(int v): 
-        value(v), f(FLT_MAX), explored(false), details(), pathed(false) {}
+        value(v), f(-1), explored(false), details(), pathed(false) {}
 };
 
