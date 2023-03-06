@@ -39,9 +39,11 @@ struct cell {
     bool explored;
     state details;
 
+    bool pathed;
+
     cell():
-        value(-1), f(FLT_MAX), explored(false), details() {}
+        value(-1), f(FLT_MAX), explored(false), details(), pathed(false) {}
     cell(int v): 
-        value(v), f(FLT_MAX), explored(false), details() {}
+        value(v), f(FLT_MAX), explored(false), details(), pathed(false) {}
 };
 

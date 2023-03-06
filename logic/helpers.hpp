@@ -46,7 +46,21 @@ void print_board(vector2d* board, point* start, point* end) {
     for (int i = 0; i < (int)board->size(); i++) {
         
         for (int j = 0; j < (int)board->at(i).size(); j++) {
-            printf("%d ", board->at(i).at(j).value);
+            
+            if (board->at(i).at(j).pathed) 
+                cout << "\x1B[31m";
+            
+            if (board->at(i).at(j).value == WALL) {
+                cout << "# ";
+            } else if (i == start->x && j == start->y) {
+                cout << "S ";
+            } else if (i == end->x && j == end->y) {
+                cout << "G ";
+            } else {
+                cout << board->at(i).at(j).value << " ";
+            }
+
+            cout << "\x1B[0m";
         }
         cout << endl;
     }
