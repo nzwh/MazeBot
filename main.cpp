@@ -18,10 +18,11 @@ int main() {
 
     vector2d board;
     point start, end;
-    load_board(&board, &start, &end, "mazes/01.txt");
-    print_board(&board, &start, &end);
+    vector<point> path;
 
-    a_star(&board, start, end);
+    load_board(&board, &start, &end, "mazes/02.txt");
+    print_board(&board, &start, &end);
+    a_star(&board, start, end, &path);
     
     return 0;
 }
