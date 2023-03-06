@@ -1,31 +1,46 @@
+void typewriter(float delay, float wait, string s) {
+
+    for (int i = 0; i < (int)s.length(); i++) {
+        printf("%c", s[i]);
+        sleep(delay);
+    }
+
+    sleep(wait);
+}
+
 string file_input() {
 
     string fi;
-
-    cout << "Enter the filename that you would like to open. \nNote: the file should be in the mazes folder. \nNo need to write \".txt\" at the end." << endl;
+    
+    typewriter(0.02, 0.5, LBLU "   Enter the filename that you would like to open.\n");
+    typewriter(0.02, 0.5, "   Note: the file should be in the mazes folder.\n");
+    typewriter(0.02, 0.5, "   No need to write \".txt\" at the end.\n\n   " LWHT "> ");
     cin >> fi;
 
     while (!valid_file("mazes//" + fi + ".txt")) {
-        cout << "Invalid file path. Please try again." << endl;
+        typewriter(0.02, 0.5, LRED "\n   Invalid file path. Please try again.\n\n   " LWHT "> ");
         cin >> fi;
     }
 
-    cout << "Valid file. Processing..." << endl;
+    typewriter(0.02, 0.5, LYEL "\n   Loaded file.\n");
+    typewriter(0.02, 1, "   Processing...\n" KRST);
     return "mazes//" + fi + ".txt";
 }
 
 void print_iter(vector2d* board, point start, point end, bool s) {
 
-    system("cls");
+    clrscr();
 
-    cout << LBLK NCUL;
+    cout << endl << endl;
+
+    cout << "   " LBLK NCUL;
     for (int i = 0; i < ((int)board->size()*2); i++) 
         cout << NHFT;
     cout << NCUR KRST << endl;
     
     for (int i = 0; i < (int)board->size(); i++) {
 
-        cout << LBLK NVFT KRST;
+        cout << "   " LBLK NVFT KRST;
         for (int j = 0; j < (int)board->at(i).size(); j++) {
             
             if (i == start.x && j == start.y) {
@@ -49,10 +64,10 @@ void print_iter(vector2d* board, point start, point end, bool s) {
         cout << LBLK NVFT KRST << endl;
     }
 
-    cout << LBLK NCDL;
+    cout << "   " LBLK NCDL;
     for (int i = 0; i < ((int)board->size()*2); i++) 
         cout << NHFT;
     cout << NCDR KRST << endl;
 
-    sleep(0.01);
+    sleep(0.1);
 }

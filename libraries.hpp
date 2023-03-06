@@ -54,6 +54,22 @@ using namespace std;
 
 #define CAP 120
 
+void clrscr() {
+    #ifdef _WIN32
+        system("cls"); 
+    #else
+        system("clear");
+    #endif
+}
+
+void esqncs() {
+    #ifdef _WIN32
+        system("chcp 65001"); 
+    #else
+        system("clear");
+    #endif
+}
+
 #include "logic/structs.hpp"
 #include "logic/helpers.hpp"
 #include "interface/gui.hpp"
