@@ -20,9 +20,10 @@ int main() {
     point start, end;
     vector<point> path;
 
-    load_board(&board, &start, &end, "mazes/02.txt");
-    print_board(&board, &start, &end);
+    load_board(&board, &start, &end, "mazes/06.txt");
+    
     a_star(&board, start, end, &path);
+    print_board(&board, &start, &end);
     
     return 0;
 }
