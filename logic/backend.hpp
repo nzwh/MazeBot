@@ -19,7 +19,7 @@ double get_h(point end, int row, int col) {
 }
 
 // This function prints out the path found by the A* algorithm
-void trace_path(vector2d* board, point start, point end, vector<point>* r_path) {
+void trace_path(vector2d* board, point start, point end, vector<point>& r_path) {
 
     stack<point> path;
 
@@ -44,9 +44,15 @@ void trace_path(vector2d* board, point start, point end, vector<point>* r_path) 
     // Add the start point to the path
     path.emplace(point(cur_x, cur_y));
     path.emplace(point(start.x, start.y));
+
+    // Add the path to the return path
+    while (!path.empty()) {
+        r_path.emplace_back(path.top());
+        path.pop();
+    }
 }
 
-void move(point parent, point next, vector2d* board, point start, point end, minheap& frontier, vector<point>* r_path, bool* found) {
+void move(point parent, point next, vector2d* board, point start, point end, minheap& frontier, vector<point>& r_path, bool* found) {
 
     int x = next.x, y = next.y;
 
@@ -59,12 +65,10 @@ void move(point parent, point next, vector2d* board, point start, point end, min
         // Update the parent coordinates for the current cell and print the path
         board->at(x).at(y).details.parent.x = parent.x;
         board->at(x).at(y).details.parent.y = parent.y;
-        printf("The path is found.\n");
         trace_path(board, start, end, r_path);
         *found = true;
 
-    } else if (!board->at(x).at(y).explored 
-        && is_unblocked(*board, x, y)) {
+    } else if (!board->at(x).at(y).explored && is_unblocked(*board, x, y)) {
             
         // Calculate the cost of moving to the current cell
         double g_succ = board->at(x).at(y).details.g + 1.0;
@@ -86,7 +90,7 @@ void move(point parent, point next, vector2d* board, point start, point end, min
 }
 
 // This function implements the A* algorithm to find the shortest path from the start point to the end point.
-void a_star(vector2d* board, point start, point end, vector<point>* r_path) {
+void a_star(vector2d* board, point start, point end, vector<point>& r_path, bool* found, int* explored) {
 
     // Set the starting point
     int x = start.x;
@@ -98,10 +102,8 @@ void a_star(vector2d* board, point start, point end, vector<point>* r_path) {
     minheap frontier;
     frontier.emplace(0.0, x, y);
 
-    bool found = false;
-
     // Loop while there are still cells to explore in the frontier
-    while (!frontier.empty() && found == false) {
+    while (!frontier.empty() && *found == false) {
 
         // Get the next cell to explore from the frontier
         node exploring = frontier.top();
@@ -111,15 +113,14 @@ void a_star(vector2d* board, point start, point end, vector<point>* r_path) {
         // Remove the cell from the frontier and mark it as explored
         frontier.pop();
         board->at(x).at(y).explored = true;
+        (*explored)++;
 
         // Move to the adjacent cells
-        move(point(x, y), point(x + 1, y), board, start, end, frontier, r_path, &found);
-        move(point(x, y), point(x - 1, y), board, start, end, frontier, r_path, &found);
-        move(point(x, y), point(x, y + 1), board, start, end, frontier, r_path, &found);
-        move(point(x, y), point(x, y - 1), board, start, end, frontier, r_path, &found);
+        move(point(x, y), point(x + 1, y), board, start, end, frontier, r_path, found);
+        move(point(x, y), point(x - 1, y), board, start, end, frontier, r_path, found);
+        move(point(x, y), point(x, y + 1), board, start, end, frontier, r_path, found);
+        move(point(x, y), point(x, y - 1), board, start, end, frontier, r_path, found);
 
-        // print_board(board, &start, &end);
-        // getchar();
-        // system("cls");
+        print_iter(board, start, end, false);
     }
 }
